@@ -248,7 +248,7 @@
   <div class="hero-text">
     <h1>Turn Your Junk Car into Cash Today</h1>
     <span class="phone">📞 <a href="tel:9059224919">Call Now: (905) 922-4919</a></span>
-    <p>We pay top dollar for unwanted vehicles in any condition. Free towing, same-day service, and instant cash in your hand. Don’t let that old car sit — turn it into money now!</p>
+    <p>We pay top dollar for unwanted vehicles in any condition. Free towing to scrap yard, same-day service, and instant cash in your hand. Don’t let that old car sit — turn it into money now!</p>
     <a href="#quote-form">
   <button>Get an Instant Offer</button>
 </a>
@@ -264,11 +264,13 @@
   <div class="features">
     <div class="feature">
       <h3>✅ Instant Cash</h3>
-      <p>Get paid on the spot when we pick up your junk car. No waiting, no hassle.</p>
+      <p>Get paid on the spot when we pick up your junk car. No waiting, no hassle.
+        You can call us at any time of the day.
+      </p>
     </div>
     <div class="feature">
-      <h3>🚚 Free Towing</h3>
-      <p>We tow your car at no charge — no matter the condition or location (within service area).</p>
+      <h3>🚚 Free Towing to scrap yard</h3>
+      <p>We tow your car ro scrap yard at no charge — no matter the condition or location (within service area).</p>
     </div>
     <div class="feature">
       <h3>📋 All Vehicles Accepted</h3>
@@ -282,20 +284,54 @@
   <h2>Get a Free Quote</h2>
   <p>Call us at <strong><a href="tel:9059224919">Call Now: (905) 922-4919</a></strong> or fill out the form below to get an instant quote.</p>
   <div class="quote-form">
-    <form onsubmit="showMessage(); return false;">
+    <form id="my-form" action="https://formspree.io/f/xblzaybz" method="POST">
       <label for="name">Full Name</label>
-      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="text" id="name" name="name" placeholder="Your Name" required>
 
       <label for="phone">Phone Number</label>
-      <input type="text" id="phone" placeholder="Your Phone Number" required>
+      <input type="text" id="phone" name="phone" placeholder="Your Phone Number" required>
 
       <label for="car">Car Details</label>
-      <textarea id="car" rows="4" placeholder="Year, Make, Model, Condition"></textarea>
+      <textarea id="car" name="car" rows="4" placeholder="Year, Make, Model, Condition"></textarea>
 
       <button type="submit">Get My Quote</button>
     </form>
+
+    <!-- Message area -->
+    <p id="form-status"></p>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById("my-form");
+  const status = document.getElementById("form-status");
+
+  form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const data = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        status.innerHTML = "✅ Thank you! Your request has been sent.";
+        form.reset();
+      } else {
+        const result = await response.json();
+        if (Object.hasOwn(result, 'errors')) {
+          status.innerHTML = "⚠️ " + result["errors"].map(e => e.message).join(", ");
+        } else {
+          status.innerHTML = "⚠️ Oops! Something went wrong.";
+        }
+      }
+    } catch (error) {
+      status.innerHTML = "⚠️ Network error. Please try again.";
+    }
+  });
+</script>
+
 
 <!-- Disclaimer -->
 <div class="disclaimer">
@@ -313,7 +349,7 @@
   <div class="footer-col">
     <h4>Get Help</h4>
     <ul>
-      <li><a href="#">Contact</a></li>
+      <li><a href="#quote-form">Contact</a></li>
     </ul>
   </div>
 </footer>
